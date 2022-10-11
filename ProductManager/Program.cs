@@ -25,10 +25,12 @@ namespace ItemManager
 
         private async Task RunProductManager()
         {
+            Console.WriteLine("Started product manager. Enter 'Q' to quit"); 
+
             ProductManager productManager = new ProductManager();
             string user_response = ""; 
 
-            while(user_response != "Q")
+            while(user_response.ToUpper() != "Q")
             {
                 Console.Write("Enter a command: ");
                 user_response = Console.ReadLine();
@@ -62,6 +64,112 @@ namespace ItemManager
                     Console.WriteLine($"{"U",-10}" + $"{"Update the details associated with a specific product",-20}");
                     Console.WriteLine($"{"W",-10}" + $"{"Clears the console screen",-20} \n");
 
+                }
+                else if(user_response.ToUpper() == "C")
+                {
+                    Console.WriteLine("Enter the details associated with the new product");
+
+
+                    Console.Write("Product ID: ");
+                    string potential_product_id = Console.ReadLine();
+                    int product_id;
+
+                    if (int.TryParse(potential_product_id, out product_id) && product_id >= 0)
+                    {
+                        Console.Write("Product Name: ");
+                        string product_name = Console.ReadLine();
+
+                        Console.Write("Product Category: ");
+                        string potential_product_category = Console.ReadLine();
+                        int product_category;
+
+                        if (int.TryParse(potential_product_category, out product_category) && product_category >= 0)
+                        {
+                            Console.Write("Product Price: ");
+                            string potential_product_price = Console.ReadLine();
+                            double product_price;
+
+                            if (double.TryParse(potential_product_price, out product_price)  && product_price >= 0)
+                            {
+                                await productManager.createNewProduct(product_id, product_name, product_category, product_price); 
+                            }
+                            else
+                            {
+                                Console.WriteLine("'{0}' Is not a valid Product Price. Product Price must be a positive real number \n", potential_product_price);
+                            }
+                                
+                        }
+                        else
+                        {
+                            Console.WriteLine("'{0}' Is not a valid Product Category. Product Category must be a positive whole number \n", potential_product_category);
+                        }
+  
+                    }
+                    else
+                    {
+                        Console.WriteLine("'{0}' Is not a valid Product ID. Product ID must be a positive whole number \n", potential_product_id);
+                    }
+
+                }
+                else if(user_response.ToUpper() == "U")
+                {
+                    Console.WriteLine("Enter the details of the product to update");
+
+
+                    Console.Write("Product ID: ");
+                    string potential_product_id = Console.ReadLine();
+                    int product_id;
+
+                    if (int.TryParse(potential_product_id, out product_id) && product_id >= 0)
+                    {
+                        Console.Write("Product Name: ");
+                        string product_name = Console.ReadLine();
+
+                        Console.Write("Product Category: ");
+                        string potential_product_category = Console.ReadLine();
+                        int product_category;
+
+                        if (int.TryParse(potential_product_category, out product_category) && product_category >= 0)
+                        {
+                            Console.Write("Product Price: ");
+                            string potential_product_price = Console.ReadLine();
+                            double product_price;
+
+                            if (double.TryParse(potential_product_price, out product_price) && product_price >= 0)
+                            {
+                                await productManager.updateProduct(product_id, product_name, product_category, product_price); 
+                            }
+                            else
+                            {
+                                Console.WriteLine("'{0}' Is not a valid Product Price. Product Price must be a positive real number \n", potential_product_price);
+                            }
+
+                        }
+                        else
+                        {
+                            Console.WriteLine("'{0}' Is not a valid Product Category. Product Category must be a positive whole number \n", potential_product_category);
+                        }
+
+                    }
+                    else
+                    {
+                        Console.WriteLine("'{0}' Is not a valid Product ID. Product ID must be a positive whole number \n", potential_product_id);
+                    }
+                }
+                else if(user_response.ToUpper() == "D")
+                {
+                    Console.Write("Enter product ID associated with product you wish to delete: ");
+                    string potential_product_id = Console.ReadLine();
+                    int product_id;
+
+                    if (int.TryParse(potential_product_id, out product_id) && product_id >= 0)
+                    {
+                        await productManager.deleteProduct(product_id);
+                    }
+                    else
+                    {
+                        Console.WriteLine("'{0}' Is not a valid Product ID. Product ID must be a positive whole number \n", potential_product_id);
+                    }
                 }
                 else
                 {
