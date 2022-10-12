@@ -189,6 +189,100 @@ namespace ProductManagerClass
                 Console.WriteLine(ex.Message + "\n");
             }
         }
+        /// <summary>
+        /// Run the unit tests for the Product Manager class
+        /// </summary>
+        public async Task runUnitTests()
+        {
+          // await testAllProducts();
+            await testRetrieveProduct();
+            await testAddProduct(); 
+            await testUpdateProduct();
+            await testDeleteProduct(); 
+        }
+
+        private async Task testAllProducts()
+        {
+            Console.WriteLine("Program should successfully return list of all availabe products");
+            await listAllProducts(); 
+        }
+
+        private async Task testRetrieveProduct()
+        {
+            Console.WriteLine(); 
+            Console.WriteLine("=========================================================");
+            Console.WriteLine("TESTING RETRIEVAL OF PRODUCTS");
+            Console.WriteLine("=========================================================");
+            Console.WriteLine(); 
+
+            List<object> test_product_ids = new List<object>{ 100, 189, -1, 10, 3891, 56, 10000000, "s", "adaf", 391};
+            List<string> test_case_statuses = new List<string> { "Success", "Success", "Fail", "Fail", "Success", "Success", "Fail", "Fail", "Fail", "Success" }; 
+            for(int i =0; i < test_case_statuses.Count; i++)
+            {
+                Console.WriteLine("Test case {0}. Status should be: {1}", i, test_case_statuses[i]); 
+                await viewProductDetails(test_product_ids[i].ToString());
+            }
+        }
+
+        private async Task testAddProduct()
+        {
+
+            Console.WriteLine();
+            Console.WriteLine("=========================================================");
+            Console.WriteLine("TESTING ADDING OF PRODUCTS");
+            Console.WriteLine("=========================================================");
+            Console.WriteLine();
+
+            List<int> test_product_ids = new List<int> {10, 1000, 10000, 10000, 10000, 10000}; 
+            List<string> test_product_names = new List<string> {"Product ABC12345", "Product XYZ12345", "Product XYZ12345", "Product TQR09875", "Product MNQ12345", "Product ABC12345"};
+            List<int> test_product_categories = new List<int> {1, 7, 3, 0, 1, 4};
+            List<double> test_product_prices = new List<double> {100, 45, 2300, 150, 12, 900};
+            List<string> test_case_statuses = new List<string> {"Success", "Success", "Fail", "Fail", "Success", "Fail"};
+            for (int i = 0; i < test_case_statuses.Count; i++)
+            {
+                Console.WriteLine("Test case {0}. Status should be: {1}", i, test_case_statuses[i]);
+                await createNewProduct(test_product_ids[i], test_product_names[i], test_product_categories[i], test_product_prices[i]); 
+            }
+        }
+
+        private async Task testUpdateProduct()
+        {
+            Console.WriteLine();
+            Console.WriteLine("=========================================================");
+            Console.WriteLine("TESTING UPDATING OF PRODUCTS");
+            Console.WriteLine("=========================================================");
+            Console.WriteLine();
+
+            List<int> test_product_ids = new List<int> { 1487, -1, 5845, 9000, 1567, 10000000 };
+            List<string> test_product_names = new List<string> { "Product THQA1234", "Product JKAPQ11234", "Product XYZ112345", "Product MVNA19193", "Product KWKQ11595", "Product ABC112345" };
+            List<int> test_product_categories = new List<int> { 1, 7, 3, 0, 1, 4 };
+            List<double> test_product_prices = new List<double> { 100, 45, 2300, 150, 12, 900 };
+            List<string> test_case_statuses = new List<string> { "Success", "Fail", "Fail", "Success", "Success", "Fail" };
+            for (int i = 0; i < test_case_statuses.Count; i++)
+            {
+                Console.WriteLine("Test case {0}. Status should be: {1}", i, test_case_statuses[i]);
+                await updateProduct(test_product_ids[i], test_product_names[i], test_product_categories[i], test_product_prices[i]);
+            }
+        }
+
+        private async Task testDeleteProduct()
+        {
+            Console.WriteLine();
+            Console.WriteLine("=========================================================");
+            Console.WriteLine("TESTING DELETING OF PRODUCTS");
+            Console.WriteLine("=========================================================");
+            Console.WriteLine();
+
+            List<int> test_product_ids = new List<int> { 10, 1000, 1589, 1459, 136, 147, 1487, -1, 5845, 9000, 1567, 10000000 };
+            List<string> test_cse_statuses = new List<string> { "Fail", "Success", "Success", "Success", "Success", "Success", "Fail", "Fail", "Fail", "Fail", "Fail", "Fail" };
+            for (int i = 0; i < test_cse_statuses.Count; i++)
+            {
+                Console.WriteLine("Test case {0}. Status should be: {1}", i, test_cse_statuses[i]);
+                await deleteProduct(test_product_ids[i]);
+            }
+
+        }
 
     }
 }
+

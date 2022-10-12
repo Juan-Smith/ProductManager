@@ -16,14 +16,26 @@ namespace ItemManager
     internal class Program
     {
 
+
+        
+        static async Task Main(string[] args)
+        {
+            /* Uncomments first line to run unit tests AND comment out the second line */
+            
+            //await RunUnitTests();
+            await RunProductManager(); // call the main function to run the product manager function. 
+
+        }
+
         /// <summary>
         /// Main funciton which executes the Product Manager 
         /// </summary>
-        static async Task Main(string[] args)
+        static async Task RunProductManager()
         {
-            Console.WriteLine("Started product manager. Enter 'Q' to quit");
 
             ProductManager productManager = new ProductManager("https://gendacproficiencytest.azurewebsites.net/API/ProductsAPI/", 0, 2, 0); // initalize instance of the Product Manager class
+
+            Console.WriteLine("Started product manager. Enter 'Q' to quit");
             string user_response = "";
 
             while (user_response.ToUpper() != "Q") // repeat until the user enter s the quit command. 
@@ -52,7 +64,7 @@ namespace ItemManager
                 }
                 else if (user_response.ToUpper() == "H") // if user enters the Help command 
                 {
-                    /* List out all of the available commands and their associated descriptions */ 
+                    /* List out all of the available commands and their associated descriptions */
 
                     Console.WriteLine($"{"Command",-10}" + $"{"Description",-20}");
                     Console.WriteLine($"{"C",-10}" + $"{"Create a new product",-20}");
@@ -68,7 +80,7 @@ namespace ItemManager
                 {
                     Console.WriteLine("Enter the details associated with the new product");
 
-                    /* prompt the user for the relevant product details and perform data validation as soon as the data is received */ 
+                    /* prompt the user for the relevant product details and perform data validation as soon as the data is received */
 
                     Console.Write("Product ID: ");
                     string potential_product_id = Console.ReadLine();
@@ -91,7 +103,7 @@ namespace ItemManager
 
                             if (double.TryParse(potential_product_price, out product_price) && product_price >= 0)
                             {
-                                /* if all of the data received was valid, request that product manager add the new product to the list of products via the API */ 
+                                /* if all of the data received was valid, request that product manager add the new product to the list of products via the API */
                                 await productManager.createNewProduct(product_id, product_name, product_category, Math.Round(product_price, 1));
                             }
                             else
@@ -108,9 +120,9 @@ namespace ItemManager
                         }
 
                     }
-                    else 
+                    else
                     {
-                        /* Invalid product Id received */ 
+                        /* Invalid product Id received */
                         Console.WriteLine("'{0}' Is not a valid Product ID. Product ID must be a positive whole number \n", potential_product_id);
                     }
 
@@ -167,28 +179,34 @@ namespace ItemManager
                 }
                 else if (user_response.ToUpper() == "D") // if user wants to delete an existing product 
                 {
-                    /* Prompt user to enter the Id of the product that should be deleted */ 
+                    /* Prompt user to enter the Id of the product that should be deleted */
                     Console.Write("Enter product ID associated with product you wish to delete: ");
                     string potential_product_id = Console.ReadLine();
                     int product_id;
 
                     if (int.TryParse(potential_product_id, out product_id) && product_id >= 0)
                     {
-                        /* If the received product Id is valid, call the deleteProduct function */ 
+                        /* If the received product Id is valid, call the deleteProduct function */
                         await productManager.deleteProduct(product_id);
                     }
                     else
                     {
-                        /* If invalid product Id was reveived */ 
+                        /* If invalid product Id was reveived */
                         Console.WriteLine("'{0}' Is not a valid Product ID. Product ID must be a positive whole number \n", potential_product_id);
                     }
                 }
-                else if(user_response.ToUpper() != "Q") 
+                else if (user_response.ToUpper() != "Q")
                 {
-                    /* If user eneterd an invalid command */ 
+                    /* If user eneterd an invalid command */
                     Console.WriteLine("'{0}' Is not a valid command. Enter the letter 'H' for a list of all available commands. \n", user_response);
                 }
             }
+        }
+
+        static async Task RunUnitTests()
+        {
+            ProductManager productManager = new ProductManager("https://gendacproficiencytest.azurewebsites.net/API/ProductsAPI/", 0, 2, 0); // initalize instance of the Product Manager class
+            await productManager.runUnitTests();
         }
 
     }
