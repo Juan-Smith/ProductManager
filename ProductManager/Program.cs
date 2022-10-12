@@ -15,46 +15,45 @@ namespace ItemManager
 {
     internal class Program
     {
-        
 
+        /// <summary>
+        /// Main funciton which executes the Product Manager 
+        /// </summary>
         static async Task Main(string[] args)
         {
-            Program program = new Program();
-            await program.RunProductManager();
-        }
+            Console.WriteLine("Started product manager. Enter 'Q' to quit");
 
-        private async Task RunProductManager()
-        {
-            Console.WriteLine("Started product manager. Enter 'Q' to quit"); 
+            ProductManager productManager = new ProductManager("https://gendacproficiencytest.azurewebsites.net/API/ProductsAPI/", 0, 2, 0); // initalize instance of the Product Manager class
+            string user_response = "";
 
-            ProductManager productManager = new ProductManager();
-            string user_response = ""; 
-
-            while(user_response.ToUpper() != "Q")
+            while (user_response.ToUpper() != "Q") // repeat until the user enter s the quit command. 
             {
                 Console.Write("Enter a command: ");
                 user_response = Console.ReadLine();
-                if (user_response.ToUpper() == "L")
+
+                if (user_response.ToUpper() == "L") // if user wants to list all availabe products 
                 {
                     await productManager.listAllProducts();
                 }
-                else if (user_response.ToUpper() == "W")
+                else if (user_response.ToUpper() == "W") // if user wants to clear the console screen 
                 {
                     Console.Clear();
                 }
-                else if (user_response.ToUpper() == "R")
+                else if (user_response.ToUpper() == "R") // if users wants to read details associated with a specific product 
                 {
                     Console.Write("Enter the ID number of the product you would like to view the details of: ");
-                    string product_id = Console.ReadLine();
+                    string product_id = Console.ReadLine(); // read the ID associated with the specific product 
                     int test_product_id;
-                    if (int.TryParse(product_id, out test_product_id))
-                        await productManager.viewProductDetails(product_id);
+                    if (int.TryParse(product_id, out test_product_id)) // check to see if the provided Id is a valid integer 
+                        await productManager.viewProductDetails(product_id); // call the product managers function to display details of the specified product 
                     else
-                        Console.WriteLine("Invalid product ID entered. Product ID must be an integer number \n");
+                        Console.WriteLine("Invalid product ID entered. Product ID must be an integer number \n"); // display error message 
 
                 }
-                else if (user_response.ToUpper() == "H")
+                else if (user_response.ToUpper() == "H") // if user enters the Help command 
                 {
+                    /* List out all of the available commands and their associated descriptions */ 
+
                     Console.WriteLine($"{"Command",-10}" + $"{"Description",-20}");
                     Console.WriteLine($"{"C",-10}" + $"{"Create a new product",-20}");
                     Console.WriteLine($"{"D",-10}" + $"{"Delete an existing product",-20}");
@@ -65,56 +64,11 @@ namespace ItemManager
                     Console.WriteLine($"{"W",-10}" + $"{"Clears the console screen",-20} \n");
 
                 }
-                else if(user_response.ToUpper() == "C")
+                else if (user_response.ToUpper() == "C") // If user wants to create a new product 
                 {
                     Console.WriteLine("Enter the details associated with the new product");
 
-
-                    Console.Write("Product ID: ");
-                    string potential_product_id = Console.ReadLine();
-                    int product_id;
-
-                    if (int.TryParse(potential_product_id, out product_id) && product_id >= 0)
-                    {
-                        Console.Write("Product Name: ");
-                        string product_name = Console.ReadLine();
-
-                        Console.Write("Product Category: ");
-                        string potential_product_category = Console.ReadLine();
-                        int product_category;
-
-                        if (int.TryParse(potential_product_category, out product_category) && product_category >= 0)
-                        {
-                            Console.Write("Product Price: ");
-                            string potential_product_price = Console.ReadLine();
-                            double product_price;
-
-                            if (double.TryParse(potential_product_price, out product_price)  && product_price >= 0)
-                            {
-                                await productManager.createNewProduct(product_id, product_name, product_category, product_price); 
-                            }
-                            else
-                            {
-                                Console.WriteLine("'{0}' Is not a valid Product Price. Product Price must be a positive real number \n", potential_product_price);
-                            }
-                                
-                        }
-                        else
-                        {
-                            Console.WriteLine("'{0}' Is not a valid Product Category. Product Category must be a positive whole number \n", potential_product_category);
-                        }
-  
-                    }
-                    else
-                    {
-                        Console.WriteLine("'{0}' Is not a valid Product ID. Product ID must be a positive whole number \n", potential_product_id);
-                    }
-
-                }
-                else if(user_response.ToUpper() == "U")
-                {
-                    Console.WriteLine("Enter the details of the product to update");
-
+                    /* prompt the user for the relevant product details and perform data validation as soon as the data is received */ 
 
                     Console.Write("Product ID: ");
                     string potential_product_id = Console.ReadLine();
@@ -137,47 +91,105 @@ namespace ItemManager
 
                             if (double.TryParse(potential_product_price, out product_price) && product_price >= 0)
                             {
-                                await productManager.updateProduct(product_id, product_name, product_category, product_price); 
+                                /* if all of the data received was valid, request that product manager add the new product to the list of products via the API */ 
+                                await productManager.createNewProduct(product_id, product_name, product_category, Math.Round(product_price, 1));
                             }
                             else
                             {
+                                /* Invalid product Price received */
                                 Console.WriteLine("'{0}' Is not a valid Product Price. Product Price must be a positive real number \n", potential_product_price);
                             }
 
                         }
                         else
                         {
+                            /* Invalid product Product Category received */
+                            Console.WriteLine("'{0}' Is not a valid Product Category. Product Category must be a positive whole number \n", potential_product_category);
+                        }
+
+                    }
+                    else 
+                    {
+                        /* Invalid product Id received */ 
+                        Console.WriteLine("'{0}' Is not a valid Product ID. Product ID must be a positive whole number \n", potential_product_id);
+                    }
+
+                }
+                else if (user_response.ToUpper() == "U") // if user wants to update an existing product 
+                {
+                    Console.WriteLine("Enter the details of the product to update");
+
+                    /* Prompt the user for the relevant product details and perform data validation as soon as the data is received */
+
+                    Console.Write("Product ID: ");
+                    string potential_product_id = Console.ReadLine();
+                    int product_id;
+
+                    if (int.TryParse(potential_product_id, out product_id) && product_id >= 0)
+                    {
+                        Console.Write("Product Name: ");
+                        string product_name = Console.ReadLine();
+
+                        Console.Write("Product Category: ");
+                        string potential_product_category = Console.ReadLine();
+                        int product_category;
+
+                        if (int.TryParse(potential_product_category, out product_category) && product_category >= 0)
+                        {
+                            Console.Write("Product Price: ");
+                            string potential_product_price = Console.ReadLine();
+                            double product_price;
+
+                            if (double.TryParse(potential_product_price, out product_price) && product_price >= 0)
+                            {
+                                /* If all of the received data was valid, call the productManager's updateProduct method to udpate details of existing product */
+                                await productManager.updateProduct(product_id, product_name, product_category, Math.Round(product_price, 1));
+                            }
+                            else
+                            {
+                                /* Invalid product Price received */
+                                Console.WriteLine("'{0}' Is not a valid Product Price. Product Price must be a positive real number \n", potential_product_price);
+                            }
+
+                        }
+                        else
+                        {
+                            /* Invalid product Cateogory received */
                             Console.WriteLine("'{0}' Is not a valid Product Category. Product Category must be a positive whole number \n", potential_product_category);
                         }
 
                     }
                     else
                     {
+                        /* Invalid product Id received */
                         Console.WriteLine("'{0}' Is not a valid Product ID. Product ID must be a positive whole number \n", potential_product_id);
                     }
                 }
-                else if(user_response.ToUpper() == "D")
+                else if (user_response.ToUpper() == "D") // if user wants to delete an existing product 
                 {
+                    /* Prompt user to enter the Id of the product that should be deleted */ 
                     Console.Write("Enter product ID associated with product you wish to delete: ");
                     string potential_product_id = Console.ReadLine();
                     int product_id;
 
                     if (int.TryParse(potential_product_id, out product_id) && product_id >= 0)
                     {
+                        /* If the received product Id is valid, call the deleteProduct function */ 
                         await productManager.deleteProduct(product_id);
                     }
                     else
                     {
+                        /* If invalid product Id was reveived */ 
                         Console.WriteLine("'{0}' Is not a valid Product ID. Product ID must be a positive whole number \n", potential_product_id);
                     }
                 }
-                else
+                else if(user_response.ToUpper() != "Q") 
                 {
-                    Console.WriteLine("'{0}' Is not a valid command. Enter the letter 'H' for a list of all available commands. \n", user_response); 
+                    /* If user eneterd an invalid command */ 
+                    Console.WriteLine("'{0}' Is not a valid command. Enter the letter 'H' for a list of all available commands. \n", user_response);
                 }
             }
         }
-
 
     }
 }

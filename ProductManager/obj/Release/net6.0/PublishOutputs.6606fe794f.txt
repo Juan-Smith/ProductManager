@@ -1,0 +1,6 @@
+D:\Personal\Coding files\Gendac\ProductManager\ProductManager\ProductManager\Release\ProductManager.exe
+D:\Personal\Coding files\Gendac\ProductManager\ProductManager\ProductManager\Release\ProductManager.dll
+D:\Personal\Coding files\Gendac\ProductManager\ProductManager\ProductManager\Release\ProductManager.deps.json
+D:\Personal\Coding files\Gendac\ProductManager\ProductManager\ProductManager\Release\ProductManager.runtimeconfig.json
+D:\Personal\Coding files\Gendac\ProductManager\ProductManager\ProductManager\Release\ProductManager.pdb
+D:\Personal\Coding files\Gendac\ProductManager\ProductManager\ProductManager\Release\Newtonsoft.Json.dll
